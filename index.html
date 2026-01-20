@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEGA GAME HUB - Free Online Games</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen active">
+            <div class="login-container">
+                <h1>🎮 MEGA GAME HUB</h1>
+                <div class="login-form">
+                    <input type="text" id="username" placeholder="Enter Username" maxlength="20">
+                    <input type="password" id="password" placeholder="Password (optional)">
+                    <button onclick="login()">ENTER PLATFORM</button>
+                    <button onclick="guestLogin()">Play as Guest</button>
+                </div>
+                <div class="status" id="loginStatus"></div>
+            </div>
+        </div>
+
+        <!-- Main Lobby -->
+        <div id="lobbyScreen" class="screen">
+            <header>
+                <h1>🎮 MEGA GAME HUB</h1>
+                <div class="user-info">
+                    <span id="userDisplay"></span>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </header>
+
+            <div class="main-content">
+                <!-- Friends & Network Panel -->
+                <aside class="sidebar">
+                    <h3>Network</h3>
+                    <div class="network-section">
+                        <button onclick="createRoom()">Create Room</button>
+                        <button onclick="joinRoom()">Join Room</button>
+                        <input type="text" id="roomId" placeholder="Room ID">
+                    </div>
+                    
+                    <h3>Friends</h3>
+                    <div id="friendsList"></div>
+                    
+                    <h3>Online Players</h3>
+                    <div id="onlinePlayers"></div>
+                    
+                    <h3>Chat</h3>
+                    <div class="chat-box">
+                        <div id="chatMessages"></div>
+                        <input type="text" id="chatInput" placeholder="Type message..." 
+                               onkeypress="if(event.key==='Enter') sendChat()">
+                    </div>
+                </aside>
+
+                <!-- Game Library -->
+                <main class="game-library">
+                    <div class="game-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="3d">3D Games</button>
+                        <button class="filter-btn" data-filter="2d">2D Games</button>
+                        <button class="filter-btn" data-filter="multiplayer">Multiplayer</button>
+                        <button class="filter-btn" data-filter="classic">Classic</button>
+                    </div>
+                    
+                    <div class="games-grid" id="gamesGrid"></div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <h2 id="currentGameTitle"></h2>
+                <button onclick="exitGame()">← Back to Lobby</button>
+            </div>
+            <div id="gameContainer"></div>
+            <div class="game-controls">
+                <button onclick="toggleFullscreen()">Fullscreen</button>
+                <button onclick="toggleAudio()">Audio: ON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load all scripts -->
+    <script src="js/network.js"></script>
+    <script src="js/userSystem.js"></script>
+    <script src="js/gameEngine.js"></script>
+    <script src="js/games/racing3D.js"></script>
+    <script src="js/games/shooter.js"></script>
+    <script src="js/games/fighter.js"></script>
+    <script src="js/games/horror.js"></script>
+    <script src="js/games/classics.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
