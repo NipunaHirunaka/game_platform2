@@ -1,12 +1,12 @@
 // Global State
-window.GamePlatform = {
-    currentUser: null,
-    currentScreen: 'login',
+window.GamePlatform = window.GamePlatform || {};
+Object.assign(window.GamePlatform, {
+    currentUser: window.GamePlatform.currentUser || null,
+    currentScreen: window.GamePlatform.currentScreen || 'login',
     games: {},
-    network: null,
     currentGame: null,
     gameInstance: null
-};
+});
 
 // Screen Management
 function showScreen(screenId) {
@@ -30,7 +30,7 @@ function initializeGames() {
             icon: '🏁',
             category: ['3d', 'racing', 'multiplayer'],
             description: 'High-speed 3D racing with multiplayer',
-            module: Racing3DGame
+            module: window.Racing3DGame
         },
         {
             id: 'spaceShooter',
@@ -38,7 +38,7 @@ function initializeGames() {
             icon: '👾',
             category: ['2d', 'shooter', 'classic'],
             description: 'Destroy alien invaders',
-            module: ShooterGame
+            module: window.ShooterGame
         },
         {
             id: 'streetFighter',
@@ -46,7 +46,7 @@ function initializeGames() {
             icon: '🥊',
             category: ['2d', 'fighting', 'multiplayer'],
             description: '1v1 fighting battles',
-            module: FighterGame
+            moduleName: 'FighterGame'
         },
         {
             id: 'horrorMaze',
@@ -54,7 +54,7 @@ function initializeGames() {
             icon: '👻',
             category: ['3d', 'horror'],
             description: 'Survive the haunted maze',
-            module: HorrorGame
+            moduleName: 'HorrorGame'
         },
         {
             id: 'snake',
@@ -78,13 +78,22 @@ function initializeGames() {
             icon: '⚔️',
             category: ['3d', 'shooting', 'multiplayer'],
             description: 'Multiplayer FPS combat',
-            module: BattleArenaGame
+            moduleName: 'BattleArenaGame'
         }
     ];
 
-    // Register games
+    // Register games (skip games with missing modules)
     gameRegistry.forEach(game => {
-        GamePlatform.games[game.id] = game;
+        const module = game.module || (game.moduleName ? window[game.moduleName] : null);
+        if (!module) {
+            console.warn(`Skipping game "${game.id}" because module is not available.`);
+            return;
+        }
+
+        GamePlatform.games[game.id] = {
+            ...game,
+            module
+        };
     });
 
     // Render game library
