@@ -17,6 +17,8 @@
                 <div class="login-form">
                     <input type="text" id="username" placeholder="Enter Username" maxlength="20">
                     <input type="password" id="password" placeholder="Password (optional)">
+                    <input type="text" id="username" placeholder="Enter Username" maxlength="20" onkeypress="if(event.key==='Enter') login()">
+                    <input type="password" id="password" placeholder="Password (optional)" onkeypress="if(event.key==='Enter') login()">
                     <button onclick="login()">ENTER PLATFORM</button>
                     <button onclick="guestLogin()">Play as Guest</button>
                 </div>
@@ -42,27 +44,7 @@
                         <button onclick="createRoom()">Create Room</button>
                         <button onclick="joinRoom()">Join Room</button>
                         <input type="text" id="roomId" placeholder="Room ID">
-                    </div>
-                    
-                    <h3>Friends</h3>
-                    <div id="friendsList"></div>
-                    
-                    <h3>Online Players</h3>
-                    <div id="onlinePlayers"></div>
-                    
-                    <h3>Chat</h3>
-                    <div class="chat-box">
-                        <div id="chatMessages"></div>
-                        <input type="text" id="chatInput" placeholder="Type message..." 
-                               onkeypress="if(event.key==='Enter') sendChat()">
-                    </div>
-                </aside>
-
-                <!-- Game Library -->
-                <main class="game-library">
-                    <div class="game-filters">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="3d">3D Games</button>
+@@ -66,36 +66,35 @@
                         <button class="filter-btn" data-filter="2d">2D Games</button>
                         <button class="filter-btn" data-filter="multiplayer">Multiplayer</button>
                         <button class="filter-btn" data-filter="classic">Classic</button>
@@ -88,6 +70,7 @@
     </div>
 
     <!-- Load all scripts -->
+    <script>window.GamePlatform = window.GamePlatform || {};</script>
     <script src="js/network.js"></script>
     <script src="js/userSystem.js"></script>
     <script src="js/gameEngine.js"></script>
