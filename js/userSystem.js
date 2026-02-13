@@ -7,13 +7,23 @@ class UserSystem {
 
     // Load users from localStorage
     loadUsers() {
-        const data = localStorage.getItem('gamehub_users');
-        return data ? JSON.parse(data) : {};
+        try {
+            const data = localStorage.getItem('gamehub_users');
+            return data ? JSON.parse(data) : {};
+        } catch (error) {
+            console.warn('Failed to read saved users. Resetting local user store.', error);
+            localStorage.removeItem('gamehub_users');
+            return {};
+        }
     }
 
     // Save users to localStorage
     saveUsers() {
-        localStorage.setItem('gamehub_users', JSON.stringify(this.users));
+        try {
+            localStorage.setItem('gamehub_users', JSON.stringify(this.users));
+        } catch (error) {
+            console.warn('Failed to save users to localStorage.', error);
+        }
     }
 
     // Login
@@ -105,33 +115,61 @@ class UserSystem {
 // Global user system
 GamePlatform.userSystem = new UserSystem();
 
+
+function loadUserData() {
+    const savedUser = localStorage.getItem('gamehub_current_user');
+    if (!savedUser) return;
+
+    try {
+        const user = JSON.parse(savedUser);
+        GamePlatform.currentUser = user;
+        GamePlatform.userSystem.currentUser = user;
+        document.getElementById('userDisplay').textContent =
+            `Welcome, ${user.username}${user.isGuest ? ' (Guest)' : ''}!`;
+        showScreen('lobbyScreen');
+        renderFriends();
+        loadAchievements();
+    } catch (error) {
+        console.warn('Failed to load saved user data.', error);
+        localStorage.removeItem('gamehub_current_user');
+    }
+}
+
 // UI Functions
 function login() {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
-    
+
     if (!username) {
         document.getElementById('loginStatus').textContent = 'Please enter username';
         return;
     }
-    
-    const result = GamePlatform.userSystem.login(username, password);
-    
-    if (result.success) {
-        GamePlatform.currentUser = result.user;
-        document.getElementById('userDisplay').textContent = 
-            `Welcome, ${result.user.username}${result.user.isGuest ? ' (Guest)' : ''}!`;
-        showScreen('lobbyScreen');
-        renderFriends();
-        loadAchievements();
-    } else {
+
+    try {
+        const result = GamePlatform.userSystem.login(username, password);
+
+        if (result.success) {
+            GamePlatform.currentUser = result.user;
+            localStorage.setItem('gamehub_current_user', JSON.stringify(result.user));
+            document.getElementById('userDisplay').textContent =
+                `Welcome, ${result.user.username}${result.user.isGuest ? ' (Guest)' : ''}!`;
+            showScreen('lobbyScreen');
+            renderFriends();
+            loadAchievements();
+            return;
+        }
+
         document.getElementById('loginStatus').textContent = result.error;
+    } catch (error) {
+        console.error('Login failed unexpectedly.', error);
+        document.getElementById('loginStatus').textContent = 'Login failed. Please refresh and try again.';
     }
 }
 
 function guestLogin() {
     const result = GamePlatform.userSystem.loginGuest();
     GamePlatform.currentUser = result.user;
+    localStorage.setItem('gamehub_current_user', JSON.stringify(result.user));
     document.getElementById('userDisplay').textContent = `Welcome, ${result.user.username} (Guest)!`;
     showScreen('lobbyScreen');
 }
@@ -139,6 +177,7 @@ function guestLogin() {
 function logout() {
     GamePlatform.userSystem.logout();
     GamePlatform.currentUser = null;
+    localStorage.removeItem('gamehub_current_user');
     showScreen('loginScreen');
 }
 
@@ -157,7 +196,7 @@ function renderFriends() {
 function loadAchievements() {
     // Display achievements in user profile area
     const user = GamePlatform.currentUser;
-    if (!user || !user.stats.achievements) return;
-    
+    if (!user || !user.stats || !user.stats.achievements) return;
+
     console.log('Achievements loaded:', user.stats.achievements);
 }

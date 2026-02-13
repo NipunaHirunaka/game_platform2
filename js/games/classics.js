@@ -379,3 +379,5 @@ const ClassicGames = {
         }
     }
 };
+
+window.ClassicGames = ClassicGames;

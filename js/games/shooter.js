@@ -226,3 +226,5 @@ class ShooterGame extends Canvas2DEngine {
         this.player.y = state.playerPos.y;
     }
 }
+
+window.ShooterGame = ShooterGame;

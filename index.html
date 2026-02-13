@@ -15,8 +15,8 @@
             <div class="login-container">
                 <h1>🎮 MEGA GAME HUB</h1>
                 <div class="login-form">
-                    <input type="text" id="username" placeholder="Enter Username" maxlength="20">
-                    <input type="password" id="password" placeholder="Password (optional)">
+                    <input type="text" id="username" placeholder="Enter Username" maxlength="20" onkeypress="if(event.key==='Enter') login()">
+                    <input type="password" id="password" placeholder="Password (optional)" onkeypress="if(event.key==='Enter') login()">
                     <button onclick="login()">ENTER PLATFORM</button>
                     <button onclick="guestLogin()">Play as Guest</button>
                 </div>
@@ -88,13 +88,12 @@
     </div>
 
     <!-- Load all scripts -->
+    <script>window.GamePlatform = window.GamePlatform || {};</script>
     <script src="js/network.js"></script>
     <script src="js/userSystem.js"></script>
     <script src="js/gameEngine.js"></script>
     <script src="js/games/racing3D.js"></script>
     <script src="js/games/shooter.js"></script>
-    <script src="js/games/fighter.js"></script>
-    <script src="js/games/horror.js"></script>
     <script src="js/games/classics.js"></script>
     <script src="js/main.js"></script>
 </body>
