@@ -168,3 +168,7 @@ class WebGL3DEngine extends GameEngine {
         this.renderer.dispose();
     }
 }
+
+window.GameEngine = GameEngine;
+window.Canvas2DEngine = Canvas2DEngine;
+window.WebGL3DEngine = WebGL3DEngine;

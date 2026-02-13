@@ -156,3 +156,5 @@ class Racing3DGame extends WebGL3DEngine {
         window.removeEventListener('keyup', this.keysHandler);
     }
 }
+
+window.Racing3DGame = Racing3DGame;
